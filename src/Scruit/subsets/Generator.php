@@ -53,28 +53,30 @@ class Generator implements \Scruit\Runnable
         if ($this->mode === 'all' || $this->mode === 'actions')   $this->actions();
         if ($this->mode === 'all' || $this->mode === 'dao')       $this->dao();
         if ($this->mode === 'all' || $this->mode === 'test')      $this->test();
-        if (!is_file($this->root . '/composer.phar')) {
-           system("curl -sS https://getcomposer.org/installer | php");
-        }
-        if (is_file($this->root . '/composer.json')) {
-            $data =  json_decode(file_get_contents($this->root . '/composer.json'), true);
-            if (!isset($data['autoload']['psr-4'][$this->appName . '\\'])) {
-                $data['autoload']['psr-4'][$this->appName . '\\'] = 'app';
-                file_put_contents($this->root . '/composer.json', json_encode($data, JSON_PRETTY_PRINT));
+        if ($this->mode === 'all' || $this->mode === 'composer') {
+            if (!is_file($this->root . '/composer.phar')) {
+                system("curl -sS https://getcomposer.org/installer | php");
             }
-        }
-        system ("composer.phar require phpunit/phpunit:3.7.* phake/phake:2.* phpdocumentor/phpdocumentor:* sebastian/phpcpd:2.x phpmd/phpmd:~2.2 --dev");
-        if (is_file($this->root . '/composer.phar')) {
-            system('mv ' . $this->root . '/composer.phar ' . $this->root . '/src/');
-        }
-        if (is_dir($this->root . '/vendor')) {
-            system('mv ' . $this->root . '/vendor ' . $this->root . '/src/');
-        }
-        if (is_file($this->root . '/composer.json')) {
-            system('mv ' . $this->root . '/composer.json ' . $this->root . '/src/');
-        }
-        if (is_file($this->root . '/composer.lock')) {
-            system('mv ' . $this->root . '/composer.lock ' . $this->root . '/src/');
+            if (is_file($this->root . '/composer.json')) {
+                $data =  json_decode(file_get_contents($this->root . '/composer.json'), true);
+                if (!isset($data['autoload']['psr-4'][$this->appName . '\\'])) {
+                    $data['autoload']['psr-4'][$this->appName . '\\'] = 'app';
+                    file_put_contents($this->root . '/composer.json', json_encode($data, JSON_PRETTY_PRINT));
+                }
+            }
+            system ("composer.phar require phpunit/phpunit:3.7.* phake/phake:2.* phpdocumentor/phpdocumentor:* sebastian/phpcpd:2.x phpmd/phpmd:~2.2 --dev");
+            if (is_file($this->root . '/composer.phar')) {
+                system('mv ' . $this->root . '/composer.phar ' . $this->root . '/src/');
+            }
+            if (is_dir($this->root . '/vendor')) {
+                system('mv ' . $this->root . '/vendor ' . $this->root . '/src/');
+            }
+            if (is_file($this->root . '/composer.json')) {
+                system('mv ' . $this->root . '/composer.json ' . $this->root . '/src/');
+            }
+            if (is_file($this->root . '/composer.lock')) {
+                system('mv ' . $this->root . '/composer.lock ' . $this->root . '/src/');
+            }
         }
     }
 
@@ -115,11 +117,11 @@ if ($name === 'load' && $options === null && is_file($baseDir . '/src/app/resour
 
 if ($name === 'migrate' && $options === null && is_file($baseDir . '/src/app/resources/database.php')) {
     $database = require $baseDir . '/src/app/resources/database.php';
-    if (is_file($baseDir . '/src/app/resources/create_table.sql')) {
+    if (is_file($baseDir . '/datas/create_table.sql')) {
         if (!isset($database['workScheme'])) $database['workScheme'] = 'migrate';
         $options  = 'targetScheme=mysql://' . $database['user'] . ':' . $database['pass'] . '@' . $database['host'] . '/' . $database['database'] .' ';
         $options .= 'workScheme=mysql://'   . $database['user'] . ':' . $database['pass'] . '@' . $database['host'] . '/' . $database['workScheme'] . ' ';
-        $options .= 'createTable=' . $baseDir . '/src/app/resources/create_table.sql';
+        $options .= 'createTable=' . $baseDir . '/datas/create_table.sql';
     }
 }
 $command = "php $baseDir/src/vendor/aainc/scruit/src/Scruit/Runner.php -n=" . escapeshellarg($name);
@@ -134,6 +136,7 @@ exit(system($command) === false ? 1 : 0);
         return array (
             $this->root . '/docroot',
             $this->root . '/docs',
+            $this->root . '/datas',
             $this->root . '/src',
             $this->root . '/src/tests',
             $this->root . '/src/tests/actions',
@@ -366,7 +369,7 @@ return array (
     'level' => \Monolog::Logger::INFO,
 );
 <?php $this->gracefulSave($path, ob_get_clean(), $this->force);
-        system("mysqldump -u " . $this->config['user'] . " -p". $this->config['pass'] . " -h " . $this->config['host'] . " --no-data > $this->appRoot/resources/create_table.sql");
+        system("mysqldump -u " . $this->config['user'] . " -p". $this->config['pass'] . " -h " . $this->config['host'] . " --database " . $this->config['db'] . " --no-data > $this->root/datas/create_table.sql");
     }
     public function actions()
     {
