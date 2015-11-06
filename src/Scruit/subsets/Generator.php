@@ -99,7 +99,7 @@ if ($name === 'migrate' && $options === null && is_file($baseDir . '/src/app/res
         $options .= 'createTable=' . $baseDir . '/src/app/resources/create_table.sql';
     }
 }
-$command = "php $baseDir/src/lib/Scruit/src/Scruit/Runner.php -n=" . escapeshellarg($name);
+$command = "php $baseDir/src/vendor/aainc/scruit/src/Scruit/Runner.php -n=" . escapeshellarg($name);
 $command .= " --bootstrap=" . escapeshellarg(__DIR__ . '/src/app/bootstrap.php');
 if ($options) $command .= ' --optional=' . escapeshellarg($options);
 exit(system($command) === false ? 1 : 0);
@@ -178,10 +178,6 @@ VagrantFile
 {
     "name": "<?php echo $this->appName?>",
     "autoload" : {
-        "psr-0": {
-            "Hoimi\\" : "lib/Hoimi/src",
-            "Mahotora\\" : "lib/Mahotora/src"
-        },
         "psr-4" : {
             "<?php echo StringUtil::camelize($this->appName)?>\\" : "app"
         }
