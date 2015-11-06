@@ -1,0 +1,7 @@
+VagrantFile
+.vagrant
+.idea
+**/reports
+**/vendor
+**/*.bak
+**/*.bk

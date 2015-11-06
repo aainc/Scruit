@@ -1,0 +1,18 @@
+{
+    "name": "Scruit",
+    "authors": [
+        {
+            "name": "t_ishida",
+            "email": "ishida@aainc.co.jp"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Scruit\\": "src/Scruit"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*",
+        "phake/phake": "2.*"
+    }
+}
