@@ -40,7 +40,7 @@ class Generator implements \Scruit\Runnable
         $this->schemes  = $this->session->getScheme();
         foreach ($this->directory() as $path) {
             if (!is_dir($path)) {
-                mkdir($path);
+                mkdir($path, 0777, true);
                 print "$path is created\n";
             }
         }
@@ -48,12 +48,34 @@ class Generator implements \Scruit\Runnable
         if ($this->mode === 'all' || $this->mode === 'bootstrap') $this->bootstrap();
         if ($this->mode === 'all' || $this->mode === 'config')    $this->config();
         if ($this->mode === 'all' || $this->mode === 'buildxml')  $this->buildXML();
-        if ($this->mode === 'all' || $this->mode === 'composer')  $this->composerJSON();
         if ($this->mode === 'all' || $this->mode === 'gitignore') $this->gitIgnore();
         if ($this->mode === 'all' || $this->mode === 'indexphp')  $this->indexPhp();
         if ($this->mode === 'all' || $this->mode === 'actions')   $this->actions();
         if ($this->mode === 'all' || $this->mode === 'dao')       $this->dao();
         if ($this->mode === 'all' || $this->mode === 'test')      $this->test();
+        if (!is_file($this->root . '/composer.phar')) {
+           system("curl -sS https://getcomposer.org/installer | php");
+        }
+        if (is_file($this->root . '/composer.json')) {
+            $data =  json_decode(file_get_contents($this->root . '/composer.json'), true);
+            if (!isset($data['autoload']['psr-4'][$this->appName . '\\'])) {
+                $data['autoload']['psr-4'][$this->appName . '\\'] = 'app';
+                file_put_contents($this->root . '/composer.json', json_encode($data, JSON_PRETTY_PRINT));
+            }
+        }
+        system ("composer.phar require phpunit/phpunit:3.7.* phake/phake:2.* phpdocumentor/phpdocumentor:* sebastian/phpcpd:2.x phpmd/phpmd:~2.2 --dev");
+        if (is_file($this->root . '/composer.phar')) {
+            system('mv ' . $this->root . '/composer.phar ' . $this->root . '/src/');
+        }
+        if (is_dir($this->root . '/vendor')) {
+            system('mv ' . $this->root . '/vendor ' . $this->root . '/src/');
+        }
+        if (is_file($this->root . '/composer.json')) {
+            system('mv ' . $this->root . '/composer.json ' . $this->root . '/src/');
+        }
+        if (is_file($this->root . '/composer.lock')) {
+            system('mv ' . $this->root . '/composer.lock ' . $this->root . '/src/');
+        }
     }
 
     public function scruit ()
@@ -63,6 +85,7 @@ class Generator implements \Scruit\Runnable
         ob_start()?>
 #!<?php echo `which php`?>
 <?php echo '<?php'?>
+
 if (count($argv) < 2 ) die ('no command');
 $name = null;
 $options = null;
@@ -109,7 +132,6 @@ exit(system($command) === false ? 1 : 0);
     public function directory()
     {
         return array (
-            $this->root . '/assets',
             $this->root . '/docroot',
             $this->root . '/docs',
             $this->root . '/src',
@@ -169,37 +191,6 @@ VagrantFile
 **/vendor
 **/*.bak
 **/*.bk
-<?php $this->gracefulSave($path, ob_get_clean(), $this->force);
-    }
-    public function composerJSON()
-    {
-        $path = $this->appRoot . '/../composer.json';
-        ob_start();?>
-{
-    "name": "<?php echo $this->appName?>",
-    "autoload" : {
-        "psr-4" : {
-            "<?php echo StringUtil::camelize($this->appName)?>\\" : "app"
-        }
-    },
-    "packages": {
-    },
-    "require-dev": {
-        "phing/phing": "2.*",
-        "phake/phake": "2.*",
-        "PHPUnit/phpunit": "*",
-        "phpdocumentor/phpdocumentor" : "*",
-        "sebastian/phpcpd" : "*",
-        "phpmd/phpmd" : "*",
-        "pdepend/pdepend" : "*",
-        "phploc/phploc" : "*",
-        "squizlabs/php_codesniffer": "2.*",
-        "fabpot/php-cs-fixer": "*"
-    },
-    "require": {
-        "monolog/monolog": "@stable"
-    }
-}
 <?php $this->gracefulSave($path, ob_get_clean(), $this->force);
     }
 
@@ -336,6 +327,7 @@ return \Hoimi\Router::getInstance()->setRoutes(array(
         $path = $this->appRoot . '/resources/config.php';
         ob_start();
         echo "<?php" ?>
+
 return new \Hoimi\Config(__FILE__);
 <?php
         $this->gracefulSave($path, ob_get_clean(), $this->force);
@@ -374,7 +366,7 @@ return array (
     'level' => \Monolog::Logger::INFO,
 );
 <?php $this->gracefulSave($path, ob_get_clean(), $this->force);
-        system("mysqldump -u " . $this->config['user'] . "-p". $this->config['pass'] . "-h " . $this->config['host'] . "--no-data > $this->appRoot/resources/create_table.sql");
+        system("mysqldump -u " . $this->config['user'] . " -p". $this->config['pass'] . " -h " . $this->config['host'] . " --no-data > $this->appRoot/resources/create_table.sql");
     }
     public function actions()
     {
@@ -454,7 +446,7 @@ class <?php echo StringUtil::camelize($scheme->getName()) ?> extends \Hoimi\Base
     public function dao()
     {
         foreach ($this->schemes as $scheme) {
-            $path = $this->appRoot . '/classes/Dao/' . StringUtil::camelize($scheme->getName()) . 'Dao.php';
+            $path = $this->appRoot . '/classes/dao/' . StringUtil::camelize($scheme->getName()) . 'Dao.php';
             $selectOne = $scheme->createSelectOne();
             $deleteOne = $scheme->createDeleteOne();
             ob_start();
@@ -532,7 +524,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 <?php
         $this->gracefulSave($this->root . '/src/phpunit.xml', ob_get_clean());
         foreach ($this->schemes as $scheme) {
-            $path = $this->testRoot . '/classes/Dao/' . StringUtil::camelize($scheme->getName()) . 'DaoTest.php';
+            $path = $this->testRoot . '/classes/dao/' . StringUtil::camelize($scheme->getName()) . 'DaoTest.php';
             $save = $scheme->createSave();
             $selectOne = $scheme->createSelectOne();
 ob_start(); echo "<?php" ?>
@@ -592,12 +584,15 @@ class <?php echo StringUtil::camelize($scheme->getName()) ?>DaoTest extends \PHP
 
     public function gracefulSave ($path, $data, $force = false)
     {
-       if ($force || !is_file($path)){
-           file_put_contents($path, $data);
-           print  "$path is saved\n";
-       } else {
-           print  "$path is skip\n";
-       }
+        if (!is_dir(dirname($path))) {
+            mkdir(dirname($path), 0777, true);
+        }
+        if ($force || !is_file($path)){
+            file_put_contents($path, $data);
+            print  "$path is saved\n";
+        } else {
+            print  "$path is skip\n";
+        }
     }
 
     public function dumpHash($arr, $level, $trim = true)
