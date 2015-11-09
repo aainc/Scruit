@@ -56,8 +56,7 @@ class Runner
         return $result;
     }
 }
-
-if (php_sapi_name() === 'cli' && isset($argv) && count($argv)) {
+if (php_sapi_name() === 'cli' && basename($_SERVER['SCRIPT_NAME']) === 'Runner.php' && isset($argv) && count($argv)) {
     require __DIR__ . '/bootstrap.php';
     $options = getopt('n::', array ('optional::', 'bootstrap::'));
     $result = 0;

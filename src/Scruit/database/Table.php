@@ -24,7 +24,7 @@ class Table
     }
 
     /**
-     * @return array
+     * @return Column[]
      */
     public function getColumns()
     {

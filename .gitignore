@@ -5,3 +5,4 @@ VagrantFile
 **/vendor
 **/*.bak
 **/*.bk
+*.iml
