@@ -5,6 +5,7 @@ class Runner
     private $commands = array();
     public function __construct () {
         foreach (glob(__DIR__ . '/subsets/*') as $fileName) {
+            if (is_dir(realpath($fileName))) continue;
             require_once realpath($fileName);
             $this->add('Scruit\subsets\\' . str_replace('.php', '', basename($fileName)));
         }
