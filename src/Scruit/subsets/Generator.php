@@ -84,6 +84,7 @@ class Generator implements \Scruit\Runnable
             new ScruitGenerator(),
             new GitIgnoreGenerator(),
             new IndexPhpGenerator(),
+            new ActionGenerator($this->appName),
             new BootStrapGenerator($this->appName),
             new BuildXMLGenerator($this->appName),
             new ConfigGenerator($this->config),
