@@ -1,35 +1,32 @@
 <?php
 print "<?php\n";
 foreach (getDependencies() as $file) {
-    $path =  __DIR__ . '/' . $file;
-    $command = "php -w $path";
-    //print preg_replace ('#^<\?php#', '' , `$command`, 1) . "\n";
-    print preg_replace ('#^<\?php#', '' , file_get_contents($path), 1) . "\n";
+    print preg_replace ('#^<\?php#', '' , file_get_contents($file), 1) . "\n";
 }
 function getDependencies () {
     return array(
-        'Runnable.php',
-        'Runner.php',
-        'StringUtil.php',
-        'database/Column.php',
-        'database/Diff.php',
-        'database/Table.php',
-        'database/Session.php',
-        'subsets/Generator.php',
-        'subsets/task/BaseTask.php',
-        'subsets/task/Generatable.php',
-        'subsets/task/ActionGenerator.php',
-        'subsets/task/ComposerJsonGenerator.php',
-        // 'subsets/task/ActionTestGenerator.php',
-        'subsets/task/BootStrapGenerator.php',
-        'subsets/task/BuildXMLGenerator.php',
-        'subsets/task/ConfigGenerator.php',
-        'subsets/task/DaoGenerator.php',
-        'subsets/task/DaoTestGenerator.php',
-        'subsets/task/GitIgnoreGenerator.php',
-        'subsets/task/IndexPhpGenerator.php',
-        'subsets/task/ScruitGenerator.php',
-        'subsets/task/TaskResult.php',
+        'https://raw.githubusercontent.com/aainc/Scruit/master/src/Scruit/Runnable.php',
+        'https://raw.githubusercontent.com/aainc/Scruit/master/src/Scruit/Runner.php',
+        'https://raw.githubusercontent.com/aainc/Scruit/master/src/Scruit/StringUtil.php',
+        'https://raw.githubusercontent.com/aainc/Scruit/master/src/Scruit/database/Column.php',
+        'https://raw.githubusercontent.com/aainc/Scruit/master/src/Scruit/database/Diff.php',
+        'https://raw.githubusercontent.com/aainc/Scruit/master/src/Scruit/database/Table.php',
+        'https://raw.githubusercontent.com/aainc/Scruit/master/src/Scruit/database/Session.php',
+        'https://raw.githubusercontent.com/aainc/Scruit/master/src/Scruit/subsets/Generator.php',
+        'https://raw.githubusercontent.com/aainc/Scruit/master/src/Scruit/subsets/task/BaseTask.php',
+        'https://raw.githubusercontent.com/aainc/Scruit/master/src/Scruit/subsets/task/Generatable.php',
+        'https://raw.githubusercontent.com/aainc/Scruit/master/src/Scruit/subsets/task/ActionGenerator.php',
+        'https://raw.githubusercontent.com/aainc/Scruit/master/src/Scruit/subsets/task/ComposerJsonGenerator.php',
+        // 'https://raw.githubusercontent.com/aainc/Scruit/master/src/Scruit/subsets/task/ActionTestGenerator.php',
+        'https://raw.githubusercontent.com/aainc/Scruit/master/src/Scruit/subsets/task/BootStrapGenerator.php',
+        'https://raw.githubusercontent.com/aainc/Scruit/master/src/Scruit/subsets/task/BuildXMLGenerator.php',
+        'https://raw.githubusercontent.com/aainc/Scruit/master/src/Scruit/subsets/task/ConfigGenerator.php',
+        'https://raw.githubusercontent.com/aainc/Scruit/master/src/Scruit/subsets/task/DaoGenerator.php',
+        'https://raw.githubusercontent.com/aainc/Scruit/master/src/Scruit/subsets/task/DaoTestGenerator.php',
+        'https://raw.githubusercontent.com/aainc/Scruit/master/src/Scruit/subsets/task/GitIgnoreGenerator.php',
+        'https://raw.githubusercontent.com/aainc/Scruit/master/src/Scruit/subsets/task/IndexPhpGenerator.php',
+        'https://raw.githubusercontent.com/aainc/Scruit/master/src/Scruit/subsets/task/ScruitGenerator.php',
+        'https://raw.githubusercontent.com/aainc/Scruit/master/src/Scruit/subsets/task/TaskResult.php',
     );
 }
 ?>
