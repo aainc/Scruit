@@ -25,6 +25,7 @@ class ActionGenerator extends BaseTask
     public function getContent(Table $scheme)
     {
         $className = StringUtil::camelize($scheme->getName());
+        ob_start();
 echo "<?php\n" ?>
 namespace <?php echo $this->appName ?>\actions;
 
