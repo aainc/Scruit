@@ -39,6 +39,6 @@ return \Hoimi\Router::getInstance()->setRoutes(array(
 <?php endforeach;?>
 ));
 <?php
-        return array(new TaskResult('src/app/bootstrap.php', ob_get_clean()));
+        return array(new TaskResult('app/bootstrap.php', ob_get_clean()));
     }
 }

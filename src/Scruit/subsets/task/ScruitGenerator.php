@@ -7,7 +7,6 @@
 namespace Scruit\subsets\task;
 
 
-use Scruit\database\Table;
 
 class ScruitGenerator implements Generatable
 {
@@ -40,8 +39,8 @@ if ($name === 'ls') {
     }
     print "\nif you type 'man=true' argument, scruit show you a subcommand manual. php scruit [subcommand] 'man=true'\n\n";
 }
-if ($name === 'load' && $options === null && is_file($baseDir . '/src/app/resources/database.php')) {
-    $database = require $baseDir . '/src/app/resources/database.php';
+if ($name === 'load' && $options === null && is_file($baseDir . '/app/resources/database.php')) {
+    $database = require $baseDir . '/app/resources/database.php';
     $options  = "host=" . $database['host'] . ' ';
     $options .= "user=" . $database['user'] . ' ';
     $options .= "pass=" . $database['pass'] . ' ';
@@ -49,8 +48,8 @@ if ($name === 'load' && $options === null && is_file($baseDir . '/src/app/resour
     $options .= "dir=" . $baseDir . '/datas';
 }
 
-if ($name === 'migrate' && $options === null && is_file($baseDir . '/src/app/resources/database.php')) {
-    $database = require $baseDir . '/src/app/resources/database.php';
+if ($name === 'migrate' && $options === null && is_file($baseDir . '/app/resources/database.php')) {
+    $database = require $baseDir . '/app/resources/database.php';
     if (is_file($baseDir . '/datas/create_table.sql')) {
         if (!isset($database['workScheme'])) $database['workScheme'] = 'migrate';
         $options  = 'targetScheme=mysql://' . $database['user'] . ':' . $database['pass'] . '@' . $database['host'] . '/' . $database['database'] .' ';
@@ -58,8 +57,8 @@ if ($name === 'migrate' && $options === null && is_file($baseDir . '/src/app/res
         $options .= 'createTable=' . $baseDir . '/datas/create_table.sql';
     }
 }
-$command = "php $baseDir/src/vendor/aainc/scruit/src/Scruit/Runner.php -n=" . escapeshellarg($name);
-$command .= " --bootstrap=" . escapeshellarg(__DIR__ . '/src/app/bootstrap.php');
+$command = "php $baseDir/vendor/aainc/scruit/src/Scruit/Runner.php -n=" . escapeshellarg($name);
+$command .= " --bootstrap=" . escapeshellarg(__DIR__ . '/app/bootstrap.php');
 if ($options) $command .= ' --optional=' . escapeshellarg($options);
 exit(system($command) === false ? 1 : 0);
 <?php

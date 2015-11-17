@@ -19,7 +19,7 @@ class EnvChanger implements Runnable
 
     public function run($args)
     {
-        $this->appRoot = $_SERVER['PWD']. '/src/app';
+        $this->appRoot = $_SERVER['PWD']. '/app';
         $root = null;
         $env = null;
         if (isset($args['root'])) {

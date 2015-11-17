@@ -1,6 +1,10 @@
 <?php
 print "<?php\n";
+
 foreach (getDependencies() as $file) {
+    if (isset($argv[1]) && $argv[1] === 'local') {
+        $file = str_replace('https://raw.githubusercontent.com/aainc/Scruit/master/src/Scruit', __DIR__, $file);
+    }
     print preg_replace ('#^<\?php#', '' , file_get_contents($file), 1) . "\n";
 }
 function getDependencies () {
@@ -51,6 +55,6 @@ $runner = new \Scruit\Runner();
 $runner->add('\Scruit\subsets\Generator');
 $runner->run(array('n' => 'init', 'optional' => implode(' ', $params)));
 $root = $_SERVER['PWD'];
-system("cd $root/src && curl -sS https://getcomposer.org/installer | php");
-system("cd $root/src && php composer.phar install");
+system("cd $root && curl -sS https://getcomposer.org/installer | php");
+system("cd $root && php composer.phar install");
 unlink(__FILE__);

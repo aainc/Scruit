@@ -73,7 +73,7 @@ class <?php echo $className ?> extends \PHPUnit_Framework_TestCase
     }
 }
 <?php
-        return new TaskResult('src/tests/classes/dao/' . $className . '.php', ob_get_clean());
+        return new TaskResult('tests/classes/dao/' . $className . '.php', ob_get_clean());
 
     }
 
@@ -83,7 +83,7 @@ class <?php echo $className ?> extends \PHPUnit_Framework_TestCase
 print "<?php\n"?>
 require_once __DIR__ . '/../vendor/autoload.php';
 <?php
-        return new TaskResult("src/tests/bootstrap.php", ob_get_clean());
+        return new TaskResult("tests/bootstrap.php", ob_get_clean());
     }
 
     public function getPhpUnitXMLContent()
@@ -105,6 +105,6 @@ require_once __DIR__ . '/../vendor/autoload.php';
     </testsuite>
 </phpunit>
 <?php
-        return new TaskResult('src/phpunit.xml', ob_get_clean());
+        return new TaskResult('phpunit.xml', ob_get_clean());
     }
 }

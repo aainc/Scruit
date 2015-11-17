@@ -61,7 +61,7 @@ class ComposerJsonGenerator implements Generatable
     }
 }
 <?php
-        return array(new TaskResult('src/composer.json', ob_get_clean()));
+        return array(new TaskResult('composer.json', ob_get_clean()));
     }
 
     public function getTaskName()

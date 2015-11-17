@@ -17,8 +17,8 @@ class IndexPhpGenerator implements Generatable
     {
            ob_start();
 echo "<?php\n"?>
-$router = require realpath(__DIR__ . '/../src/app/bootstrap.php');
-$config = require realpath(__DIR__ . '/../src/app/resources/config.php');
+$router = require realpath(__DIR__ . '/../app/bootstrap.php');
+$config = require realpath(__DIR__ . '/../app/resources/config.php');
 $request = new \Hoimi\Request($_SERVER, $_REQUEST);
 $response = null;
 try {

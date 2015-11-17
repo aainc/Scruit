@@ -37,7 +37,7 @@ class ConfigGenerator implements Generatable
 echo "<?php\n" ?>
 return new \Hoimi\Config(__FILE__);
 <?php
-        return new TaskResult('src/app/resources/config.php', ob_get_clean());
+        return new TaskResult('app/resources/config.php', ob_get_clean());
     }
 
     public function getDatabasePhp()
@@ -53,7 +53,7 @@ return array(
     'workScheme' => null,
 );
 <?php
-        return new TaskResult('src/app/resources/database.php', ob_get_clean());
+        return new TaskResult('app/resources/database.php', ob_get_clean());
     }
 
     public function getSessionPhp()
@@ -72,7 +72,7 @@ return array (
     // ),
     );
 <?php
-        return new TaskResult('src/app/resources/session.php', ob_get_clean());
+        return new TaskResult('app/resources/session.php', ob_get_clean());
     }
 
     public function getLogPhp()
@@ -84,6 +84,6 @@ return array (
     'level' => \Monolog::Logger::INFO,
 );
 <?php
-        return new TaskResult('src/app/resources/log.php', ob_get_clean());
+        return new TaskResult('app/resources/log.php', ob_get_clean());
     }
 }

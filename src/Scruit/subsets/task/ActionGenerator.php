@@ -100,6 +100,6 @@ class <?php echo $className ?> extends \Hoimi\BaseAction
     }
 }
 <?php
-       return new TaskResult('src/app/actions/' . $className . '.php', ob_get_clean());
+       return new TaskResult('app/actions/' . $className . '.php', ob_get_clean());
     }
 }

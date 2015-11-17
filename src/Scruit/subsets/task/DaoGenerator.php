@@ -71,6 +71,6 @@ class <?php echo $className ?> extends \Mahotora\BaseDao
     }
 }
 <?php
-        return new TaskResult('src/app/classes/dao/' . $className . '.php', ob_get_clean());
+        return new TaskResult('app/classes/dao/' . $className . '.php', ob_get_clean());
     }
 }

@@ -17,7 +17,7 @@ class UnOptimizer implements Runnable
     public function __construct ()
     {
         $this->libRoot = dirname(dirname(dirname(dirname(__DIR__))));
-        $this->appRoot = $_SERVER['PWD'] . '/src/app';
+        $this->appRoot = $_SERVER['PWD'] . '/app';
     }
 
     public function getName()

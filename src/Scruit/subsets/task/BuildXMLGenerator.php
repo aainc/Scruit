@@ -119,6 +119,6 @@ echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
     </target>
 </project>
 <?php
-        return new TaskResult('src/build.xml', ob_get_clean());
+        return new TaskResult('build.xml', ob_get_clean());
     }
 }
