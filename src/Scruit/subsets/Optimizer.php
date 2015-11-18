@@ -30,7 +30,9 @@ class Optimizer implements \Scruit\Runnable
             }
             foreach ($val['list'] as $row) {
                 if (is_file($row)) {
-                    file_put_contents($path, trim(preg_replace('#<\?php#', '', `php -w $row`)) . "\n", FILE_APPEND);
+                    $str = `php -w $row`;
+                    $str = preg_replace('#^<\?php#', '', $str, 1);
+                    file_put_contents($path, trim($str) . "\n", FILE_APPEND);
                 } else {
                     error_log("$row is not exists.");
                 }
