@@ -31,6 +31,8 @@ namespace <?php echo $this->appName ?>\actions;
 
 use \Hoimi\Response\Json;
 use \Mahotora\DatabaseSessionImpl;
+use \Mahotora\DatabaseSessionFactory;
+
 class <?php echo $className ?> extends \Hoimi\BaseAction
 {
 <?php if (count($scheme->getPrimaryKeys()) === 1):?>
