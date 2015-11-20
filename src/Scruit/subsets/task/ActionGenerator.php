@@ -92,7 +92,7 @@ class <?php echo $className ?> extends \Hoimi\BaseAction
     public function getDao()
     {
         if ($this->dao === null) {
-            $this->dao = new \<?php echo StringUtil::camelize($this->appName)?>\classes\dao\<?php echo StringUtil::camelize($scheme->getName())?>Dao(
+            $this->dao = new \<?php echo $this->appName?>\classes\dao\<?php echo StringUtil::camelize($scheme->getName())?>Dao(
                 DatabaseSessionFactory::build($this->getConfig()->get('database'))
             );
         }
