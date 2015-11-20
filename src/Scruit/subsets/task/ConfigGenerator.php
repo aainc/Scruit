@@ -81,7 +81,7 @@ return array (
 print "<?php\n"?>
 return array (
     'directory' => '/tmp',
-    'level' => \Monolog::Logger::INFO,
+    'level' => \Monolog\Logger::INFO,
 );
 <?php
         return new TaskResult('app/resources/log.php', ob_get_clean());
