@@ -9,7 +9,7 @@ class StringUtil
 
     public static function decamelize($str)
     {
-        return ltrim(preg_replace('/([A-Z])/e', "'_'.strtolower('$1')", $str), '_');
+        return ltrim(preg_replace_callback('/([A-Z])/', function ($matches) {return '_' . strtolower($matches[1]);}, $str), '_');
     }
 
     public static function parseConfig($str)
