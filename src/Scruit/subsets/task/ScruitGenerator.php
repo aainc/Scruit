@@ -28,6 +28,7 @@ array_shift($argv);
 $name = array_shift($argv);
 $argv && $options = array_shift($argv);
 $baseDir = __DIR__;
+$dictionary = array();
 if (is_file( $baseDir . '/.scruit')) {
     $dictionary = require $baseDir . '/.scruit';
     isset($dictionary[$name]) && $name = $dictionary[$name];
@@ -38,6 +39,7 @@ if ($name === 'ls') {
         print "$key\n";
     }
     print "\nif you type 'man=true' argument, scruit show you a subcommand manual. php scruit [subcommand] 'man=true'\n\n";
+    exit(0);
 }
 if ($name === 'load' && $options === null && is_file($baseDir . '/app/resources/database.php')) {
     $database = require $baseDir . '/app/resources/database.php';
@@ -58,7 +60,8 @@ if ($name === 'migrate' && $options === null && is_file($baseDir . '/app/resourc
     }
 }
 $command = "php $baseDir/vendor/aainc/scruit/src/Scruit/Runner.php -n=" . escapeshellarg($name);
-$command .= " --bootstrap=" . escapeshellarg(__DIR__ . '/app/bootstrap.php');
+$bootstrap = __DIR__ . '/app/bootstrap.php';
+if (is_file($bootstrap)) $command .= " --bootstrap=" . escapeshellarg($bootstrap);
 if ($options) $command .= ' --optional=' . escapeshellarg($options);
 exit(system($command) === false ? 1 : 0);
 <?php
