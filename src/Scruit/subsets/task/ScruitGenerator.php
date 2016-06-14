@@ -39,18 +39,14 @@ if ($name === 'ls') {
         print "$key\n";
     }
     print "\nif you type 'man=true' argument, scruit show you a subcommand manual. php scruit [subcommand] 'man=true'\n\n";
-    exit(0);
-}
-if ($name === 'load' && $options === null && is_file($baseDir . '/app/resources/database.php')) {
+} elseif ($name === 'load' && $options === null && is_file($baseDir . '/app/resources/database.php')) {
     $database = require $baseDir . '/app/resources/database.php';
     $options  = "host=" . $database['host'] . ' ';
     $options .= "user=" . $database['user'] . ' ';
     $options .= "pass=" . $database['pass'] . ' ';
     $options .= "db="   . $database['database'] . ' ';
     $options .= "dir=" . $baseDir . '/datas';
-}
-
-if ($name === 'migrate' && $options === null && is_file($baseDir . '/app/resources/database.php')) {
+} elseif ($name === 'migrate' && $options === null && is_file($baseDir . '/app/resources/database.php')) {
     $database = require $baseDir . '/app/resources/database.php';
     if (is_file($baseDir . '/datas/create_table.sql')) {
         if (!isset($database['workScheme'])) $database['workScheme'] = 'migrate';
