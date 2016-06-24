@@ -34,7 +34,7 @@ class Generator implements \Scruit\Runnable
 
         usage:
         ```
-        php [path to scruit/Runner.php] -n=init -options="app=[appName] host=[databaseHost] user=[databaseUser] pass=[databaseUserPassword] db=[databaseName]"
+        php [path to scruit/Runner.php] -n=init --optional="app=[appName] host=[databaseHost] user=[databaseUser] pass=[databaseUserPassword] db=[databaseName]"
         ```
         options-optional:
         force: [true/false] if exists file, overwrite it.
@@ -45,18 +45,22 @@ class Generator implements \Scruit\Runnable
     public function run($args)
     {
         $this->config = $args;
-        if (!isset($this->config['app']))  throw new \RuntimeException('app is required');
-        if (!isset($this->config['host'])) throw new \RuntimeException('host is required');
-        if (!isset($this->config['user'])) throw new \RuntimeException('user is required');
-        if (!isset($this->config['pass'])) throw new \RuntimeException('pass is required');
-        if (!isset($this->config['db']))   throw new \RuntimeException('db is required');
+        $mode = isset($this->config['mode'])  ? strtolower($this->config['mode']) : 'all';
+        $schemes = array();
+        if ($mode === 'scruit' || $mode === 'gitignore') {
+            isset($this->config['app']) || $this->config['app'] = 'dummy';
+        } else {
+            if (!isset($this->config['app']))  throw new \RuntimeException('app is required');
+            if (!isset($this->config['host'])) throw new \RuntimeException('host is required');
+            if (!isset($this->config['user'])) throw new \RuntimeException('user is required');
+            if (!isset($this->config['pass'])) throw new \RuntimeException('pass is required');
+            if (!isset($this->config['db']))   throw new \RuntimeException('db is required');
+            $this->session = new Session($this->config);
+            $schemes = $this->session->getScheme();
+        }
 
         $this->force    = isset($this->config['force']) && strtolower($this->config['force']) != 'false';
         $this->root     = $_SERVER['PWD'];
-        $this->appName  = $this->config['app'];
-        $this->session = new Session($this->config);
-        $schemes  = $this->session->getScheme();
-        $mode     = isset($this->config['mode'])  ? strtolower($this->config['mode']) : 'all';
 
         foreach ($this->getTasks() as $generatable) {
             if ($mode !== 'all' && $generatable->getTaskName() !== $mode) continue;
@@ -66,10 +70,12 @@ class Generator implements \Scruit\Runnable
             }
             print "\n";
         }
-        if (!is_dir($this->root . '/datas')) {
-            mkdir($this->root . '/datas');
+        if (!is_dir($this->root . '/data')) {
+            mkdir($this->root . '/data');
         }
-        system("mysqldump -u " . $this->config['user'] . " -p". $this->config['pass'] . " -h " . $this->config['host'] . " --database " . $this->config['db'] . " --no-data > $this->root/datas/create_table.sql");
+        if ($this->session) {
+            system("mysqldump -u " . $this->config['user'] . " -p". $this->config['pass'] . " -h " . $this->config['host'] . " --database " . $this->config['db'] . " --no-data > $this->root/data/create_table.sql");
+        }
     }
 
 

@@ -45,14 +45,14 @@ if ($name === 'ls') {
     $options .= "user=" . $database['user'] . ' ';
     $options .= "pass=" . $database['pass'] . ' ';
     $options .= "db="   . $database['database'] . ' ';
-    $options .= "dir=" . $baseDir . '/datas';
+    $options .= "dir=" . $baseDir . '/data';
 } elseif ($name === 'migrate' && $options === null && is_file($baseDir . '/app/resources/database.php')) {
     $database = require $baseDir . '/app/resources/database.php';
-    if (is_file($baseDir . '/datas/create_table.sql')) {
+    if (is_file($baseDir . '/data/create_table.sql')) {
         if (!isset($database['workScheme'])) $database['workScheme'] = 'migrate';
         $options  = 'targetScheme=mysql://' . $database['user'] . ':' . $database['pass'] . '@' . $database['host'] . '/' . $database['database'] .' ';
         $options .= 'workScheme=mysql://'   . $database['user'] . ':' . $database['pass'] . '@' . $database['host'] . '/' . $database['workScheme'] . ' ';
-        $options .= 'createTable=' . $baseDir . '/datas/create_table.sql';
+        $options .= 'createTable=' . $baseDir . '/data/create_table.sql';
     }
 }
 $command = "php $baseDir/vendor/aainc/scruit/src/Scruit/Runner.php -n=" . escapeshellarg($name);

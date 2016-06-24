@@ -69,7 +69,7 @@ this command is load data as test data, development environment or integration t
 
 usage:
 ```
-php scruit load "dir=[path to test datas]"
+php scruit load "dir=[path to test data]"
 ```
 <?php
     }
