@@ -22,7 +22,7 @@ class SubCommandGenerator  implements Runnable
         if (!isset($args['dir']) || !is_dir($args['dir'] )) {
             throw new \InvalidArgumentException('need dir');
         }
-        $root = $_SERVER['PWD'];
+        $root = getcwd();
         $dotScruitPath = "$root/.scruit";
         $handle = opendir($args['dir']);
         $commands = null;

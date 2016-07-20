@@ -7,7 +7,7 @@ class Optimizer implements \Scruit\Runnable
     public function __construct ()
     {
         $this->libRoot = dirname(dirname(dirname(dirname(__DIR__))));
-        $this->appRoot = $_SERVER['PWD'] . '/app';
+        $this->appRoot = getcwd() . '/app';
     }
 
     public function getName()

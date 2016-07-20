@@ -60,7 +60,7 @@ class Generator implements \Scruit\Runnable
         }
 
         $this->force    = isset($this->config['force']) && strtolower($this->config['force']) != 'false';
-        $this->root     = $_SERVER['PWD'];
+        $this->root     = getcwd(); 
 
         foreach ($this->getTasks() as $generatable) {
             if ($mode !== 'all' && $generatable->getTaskName() !== $mode) continue;
