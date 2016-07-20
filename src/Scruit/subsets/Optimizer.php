@@ -98,6 +98,9 @@ optimizer compress and concat libraries and config file.
 
     public function compressConfig()
     {
+        if (!is_file($this->appRoot . '/bootstrap.php') || !is_file($this->appRoot . '/resources/config.php')) {
+            return ;
+        }
         require_once $this->appRoot . '/bootstrap.php';
         $configPath = $this->appRoot . '/resources/config.php';
         $config = require $configPath;
